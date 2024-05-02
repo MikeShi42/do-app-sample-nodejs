@@ -563,10 +563,14 @@ function randomPage(req, res) {
   var paragraphs = randomParagraphs(seed);
   var links = randomLinks(seed, req.hostname);
 
-  res.render('random', {title: title, paragraphs: paragraphs, links: links});
+  if (Math.random() > 0.5) {
+    throw new Error('Oh no, a random error!');
+  }
+
+  res.render('random', { title: title, paragraphs: paragraphs, links: links });
 }
 
-router.all('*', randomPage);
+router.use('*', randomPage);
 
 // console.log(lorem.generateParagraphs(7));
 

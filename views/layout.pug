@@ -3,5 +3,16 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    meta(name="traceparent" content=traceParent)
+    script(src="//www.unpkg.com/@hyperdx/browser@0.18.4/build/index.js")
+    script.
+      HyperDX.init({
+        apiKey: '4e4b3326-6900-4408-8812-407f8b03b560',
+        service: 'my-frontend-app',
+        tracePropagationTargets: [/api.myapp.domain/i], // Set to link traces from frontend to backend requests
+      });
+      HyperDX.setGlobalAttributes({
+        userEmail: 'demo@hyperdx.io',
+      });
   body
     block content

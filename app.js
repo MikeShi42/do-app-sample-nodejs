@@ -7,6 +7,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 
+var opentelemetry = require('@opentelemetry/api');
+
 var app = express();
 
 // view engine setup
@@ -18,6 +20,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function (req, res, next) {
+  const spanContext = opentelemetry.trace.getActiveSpan().spanContext();
+  res.locals.traceParent = `00-${spanContext.traceId}-${spanContext.spanId}-01`;
+  next();
+});
 
 app.use('/', indexRouter);
 // app.use('/users', usersRouter);
